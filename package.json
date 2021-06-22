@@ -1,8 +1,8 @@
 {
-  "name": "feathers-reactive",
+  "name": "@rmanibus/feathers-reactive",
   "description": "Reactive API extensions for Feathers services",
   "version": "0.8.2",
-  "homepage": "https://github.com/feathersjs-ecosystem/feathers-reactive",
+  "homepage": "https://github.com/rmanibus/feathers-reactive",
   "main": "lib/index",
   "keywords": [
     "feathers",
@@ -11,7 +11,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git://github.com/feathersjs-ecosystem/feathers-reactive.git"
+    "url": "git://github.com/rmanibus/feathers-reactive.git"
   },
   "author": {
     "name": "Feathers contributors",
