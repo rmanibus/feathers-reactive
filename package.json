@@ -1,7 +1,7 @@
 {
   "name": "@rmanibus/feathers-reactive",
   "description": "Reactive API extensions for Feathers services",
-  "version": "0.8.3",
+  "version": "0.8.4",
   "homepage": "https://github.com/rmanibus/feathers-reactive",
   "main": "lib/index",
   "keywords": [
