@@ -204,6 +204,7 @@ var debug = (0, _debug.default)('feathers-reactive');
 function FeathersRx() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   var listStrategies = (0, _strategies.default)();
+  var resetSubject = new _rxjs.Subject();
 
   if (!options.idField) {
     throw new Error("feathers-reactive: setting options.idField is mandatory");
@@ -235,7 +236,8 @@ function FeathersRx() {
       }).pipe((0, _operators.share)()),
       removed: (0, _rxjs.fromEvent)(service, 'removed', function () {
         return arguments.length <= 0 ? undefined : arguments[0];
-      }).pipe((0, _operators.share)())
+      }).pipe((0, _operators.share)()),
+      reset: resetSubject.asObservable()
     }; // object to hold our reactive methods
 
     var reactiveMethods = {};
@@ -254,10 +256,14 @@ function FeathersRx() {
       updated$: events.updated,
       patched$: events.patched,
       removed$: events.removed,
+      reset$: events.reset,
       rx: function rx() {
         var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
         this._rx = options;
         return this;
+      },
+      reset: function reset() {
+        resetSubject.next();
       },
       watch: function watch() {
         var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
@@ -514,7 +520,8 @@ module.exports = function () {
       };
 
       var events$ = (0, _rxjs.merge)(this.created$.pipe((0, _operators.filter)(matches), (0, _operators.map)(onCreated)), this.removed$.pipe((0, _operators.map)(onRemoved)), (0, _rxjs.merge)(this.updated$, this.patched$).pipe((0, _operators.map)(onUpdated)));
-      return source$.pipe((0, _operators.concatMap)(function (data) {
+      var reset$ = this.reset$;
+      return (0, _rxjs.merge)(source$, reset$.pipe((0, _operators.concatMapTo)(source$))).pipe((0, _operators.switchMap)(function (data) {
         return (0, _rxjs.of)(data).pipe((0, _operators.concat)(events$.pipe((0, _operators.scan)(function (current, callback) {
           return sortAndTrim(callback(current));
         }, data))));
